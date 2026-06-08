@@ -7,5 +7,5 @@ const PORT = process.env.PORT || 3000;
 app.use(express.static(path.join(__dirname, '..', 'public')));
 
 app.listen(PORT, () => {
-  console.log(`Chicken Story — serveur lancé sur http://localhost:${PORT}`);
+  console.log(`Saiyan Food — serveur lancé sur http://localhost:${PORT}`);
 });

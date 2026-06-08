@@ -1,100 +1,143 @@
+/* =================================================================
+   SAIYAN FOOD — Interactions
+   ================================================================= */
+
+/* --- Préférence de mouvement réduit --- */
+const MOUVEMENT_REDUIT = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
 /* --- Écran de chargement --- */
 (function () {
   const ecran = document.getElementById('chargement');
   const barre = document.getElementById('chargement-barre');
-  if (!ecran || !barre) return;
+  if (!ecran) return;
 
-  // Déjà affiché cette session → masquer immédiatement sans animation
-  if (sessionStorage.getItem('chargement-vu')) {
+  // Déjà vu cette session -> masquer immédiatement
+  if (sessionStorage.getItem('saiyan-charge')) {
     ecran.style.display = 'none';
     return;
   }
 
-  let animTerminee = false;
-  let ressourcesChargees = false;
+  let animFinie = MOUVEMENT_REDUIT;
+  let ressourcesPretes = false;
 
-  function tenterMasquer() {
-    if (animTerminee && ressourcesChargees) {
+  function tenter() {
+    if (animFinie && ressourcesPretes) {
       ecran.classList.add('chargement--cache');
-      sessionStorage.setItem('chargement-vu', '1');
+      sessionStorage.setItem('saiyan-charge', '1');
     }
   }
 
-  barre.addEventListener('animationend', function () {
-    animTerminee = true;
-    tenterMasquer();
+  if (barre && !MOUVEMENT_REDUIT) {
+    barre.addEventListener('animationend', function () { animFinie = true; tenter(); });
+  }
+
+  Promise.all([
+    new Promise(function (r) { window.addEventListener('load', r, { once: true }); }),
+    document.fonts ? document.fonts.ready : Promise.resolve()
+  ]).then(function () {
+    ressourcesPretes = true;
+    // Filet de sécurité si l'animation ne se déclenche pas
+    setTimeout(function () { animFinie = true; tenter(); }, MOUVEMENT_REDUIT ? 0 : 200);
+    tenter();
   });
 
-  // Attendre la page complète ET les polices Google Fonts
-  Promise.all([
-    new Promise(function (resolve) {
-      window.addEventListener('load', resolve, { once: true });
-    }),
-    document.fonts.ready
-  ]).then(function () {
-    ressourcesChargees = true;
-    tenterMasquer();
-  });
+  // Garde-fou absolu : jamais bloqué plus de 3,5 s
+  setTimeout(function () {
+    ecran.classList.add('chargement--cache');
+    sessionStorage.setItem('saiyan-charge', '1');
+  }, 3500);
+})();
+
+/* --- Navbar : état au défilement --- */
+(function () {
+  const navbar = document.querySelector('.navbar');
+  if (!navbar) return;
+  function maj() {
+    if (window.scrollY > 24) navbar.classList.add('navbar--defile');
+    else navbar.classList.remove('navbar--defile');
+  }
+  maj();
+  window.addEventListener('scroll', maj, { passive: true });
 })();
 
 /* --- Tiroir de navigation (mobile) --- */
 (function () {
-  const btnBurger = document.getElementById('nav-burger');
-  const tiroir    = document.getElementById('nav-tiroir');
-  const fondTiroir = document.getElementById('nav-tiroir-fond');
-  const btnFermer = document.getElementById('nav-tiroir-fermer');
-
-  if (!btnBurger || !tiroir) return;
+  const burger = document.getElementById('nav-burger');
+  const tiroir = document.getElementById('nav-tiroir');
+  const fond   = document.getElementById('nav-tiroir-fond');
+  const fermer = document.getElementById('nav-tiroir-fermer');
+  if (!burger || !tiroir) return;
 
   function ouvrir() {
     tiroir.classList.add('ouvert');
-    btnBurger.classList.add('ouvert');
-    btnBurger.setAttribute('aria-expanded', 'true');
+    burger.classList.add('ouvert');
+    burger.setAttribute('aria-expanded', 'true');
     document.body.style.overflow = 'hidden';
   }
-
-  function fermer() {
+  function fermerT() {
     tiroir.classList.remove('ouvert');
-    btnBurger.classList.remove('ouvert');
-    btnBurger.setAttribute('aria-expanded', 'false');
+    burger.classList.remove('ouvert');
+    burger.setAttribute('aria-expanded', 'false');
     document.body.style.overflow = '';
   }
 
-  btnBurger.addEventListener('click', ouvrir);
-  if (btnFermer)   btnFermer.addEventListener('click', fermer);
-  if (fondTiroir)  fondTiroir.addEventListener('click', fermer);
-
+  burger.addEventListener('click', ouvrir);
+  if (fermer) fermer.addEventListener('click', fermerT);
+  if (fond) fond.addEventListener('click', fermerT);
+  tiroir.querySelectorAll('a').forEach(function (a) { a.addEventListener('click', fermerT); });
   document.addEventListener('keydown', function (e) {
-    if (e.key === 'Escape' && tiroir.classList.contains('ouvert')) fermer();
+    if (e.key === 'Escape' && tiroir.classList.contains('ouvert')) fermerT();
   });
 })();
 
-document.addEventListener('DOMContentLoaded', () => {
+/* --- Parallaxe légère du hero --- */
+(function () {
+  if (MOUVEMENT_REDUIT) return;
+  const img = document.querySelector('.hero__bg-img');
+  if (!img) return;
+  let cible = 0, courant = 0, raf = null;
+  function boucle() {
+    courant += (cible - courant) * 0.08;
+    img.style.transform = 'translate3d(0,' + courant.toFixed(2) + 'px,0)';
+    if (Math.abs(cible - courant) > 0.1) { raf = requestAnimationFrame(boucle); }
+    else { raf = null; }
+  }
+  window.addEventListener('scroll', function () {
+    cible = Math.min(window.scrollY * 0.18, 160);
+    if (!raf) raf = requestAnimationFrame(boucle);
+  }, { passive: true });
+})();
 
-  document.querySelectorAll('.footer__ticker-piste').forEach((piste) => {
-    if (piste.dataset.dupliquee === 'true') return;
-
-    const elements = Array.from(piste.children);
-    elements.forEach((element) => {
-      const clone = element.cloneNode(true);
+/* --- Bandeaux défilants : duplication pour boucle continue --- */
+document.addEventListener('DOMContentLoaded', function () {
+  document.querySelectorAll('.bandeau__piste, .footer__ticker-piste').forEach(function (piste) {
+    if (piste.dataset.dup === '1') return;
+    Array.from(piste.children).forEach(function (el) {
+      const clone = el.cloneNode(true);
       clone.setAttribute('aria-hidden', 'true');
       piste.appendChild(clone);
     });
-
-    piste.dataset.dupliquee = 'true';
+    piste.dataset.dup = '1';
   });
 
-  const observeur = new IntersectionObserver((entrees) => {
-    entrees.forEach((entree) => {
+  /* --- Révélation au scroll --- */
+  const cibles = document.querySelectorAll('.reveal');
+  if (!cibles.length) return;
+
+  // Affichage immédiat si mouvement réduit ou pas d'IntersectionObserver
+  if (MOUVEMENT_REDUIT || !('IntersectionObserver' in window)) {
+    cibles.forEach(function (el) { el.classList.add('visible'); });
+    return;
+  }
+
+  const obs = new IntersectionObserver(function (entrees) {
+    entrees.forEach(function (entree) {
       if (entree.isIntersecting) {
         entree.target.classList.add('visible');
-        observeur.unobserve(entree.target);
+        obs.unobserve(entree.target);
       }
     });
-  }, { threshold: 0.12 });
+  }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
 
-  document.querySelectorAll(
-    '.histoire__entete, .histoire__grille, .histoire__chiffres, .avis__entete, .avis__grille'
-  ).forEach((el) => observeur.observe(el));
-
+  cibles.forEach(function (el) { obs.observe(el); });
 });
