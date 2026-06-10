@@ -124,8 +124,10 @@ document.addEventListener('DOMContentLoaded', function () {
   const cibles = document.querySelectorAll('.reveal');
   if (!cibles.length) return;
 
-  // Affichage immédiat si mouvement réduit ou pas d'IntersectionObserver
-  if (MOUVEMENT_REDUIT || !('IntersectionObserver' in window)) {
+  // Repli : affichage immédiat si IntersectionObserver indisponible.
+  // (On garde volontairement la révélation au scroll même en mouvement réduit,
+  //  c'est un parti pris « démo » assumé — voir le bloc reduced-motion du CSS.)
+  if (!('IntersectionObserver' in window)) {
     cibles.forEach(function (el) { el.classList.add('visible'); });
     return;
   }
