@@ -61,13 +61,13 @@ images/                 Logos, visuels d'ambiance et photos de plats
 Ces données proviennent de sources publiques (site officiel, TripAdvisor) et
 doivent être validées par le restaurant :
 
-- **Adresse** : « 68 Rue du Poirier Baron, 95110 Sannois » (variante vue :
-  « Place du Poirier Baron »).
+- **Adresse** : 68 Rue du Poirier Baron, 95110 Sannois ✅ confirmée (2026-06-27).
 - **Téléphone** : 01 80 87 41 40 — **WhatsApp** +33 6 63 29 78 91 (autre listing :
   +33 6 36 06 22 21).
 - **Email** : gestion@kayani.kitchen.
 - **Horaires** : Lun/Jeu/Ven/Sam/Dim 11h30–14h15 & 18h00–23h00 ; Mar/Mer soir uniquement.
-- **Coordonnées GPS** du JSON-LD (`index.html`) : approximatives (centre de Sannois).
+- **Coordonnées GPS** (JSON-LD + balises `geo`) : 48.977334, 2.244949 ✅ géocodées
+  sur l'adresse confirmée (rooftop, 2026-06-27).
 - **Prix du menu** : estimations réalistes — à aligner sur la carte Dood.
 - **Avis clients** : 2 sont repris de TripAdvisor ; remplacer les autres par de
   vrais avis Google/TripAdvisor (verbatim). Ne jamais afficher le nombre total d'avis.
