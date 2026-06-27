@@ -46,8 +46,8 @@ entièrement nouvelle.
 - Téléphone : 01 80 87 41 40 ⚠️ · WhatsApp +33 6 63 29 78 91 ⚠️
 - Email : gestion@kayani.kitchen ⚠️
 - Horaires : Lun/Jeu/Ven/Sam/Dim 11h30–14h15 & 18h00–23h00 ; Mar/Mer 18h00–23h00 ⚠️
-- Commande : Uber Eats, marketplace dood · Instagram @kayanii.kitchen
-- Les **prix du menu** sont des estimations réalistes à confirmer sur Uber Eats. ⚠️
+- Commande : marketplace **Dood** (https://kayani-kitchen.marketplace.dood.com/fr) · Instagram @kayanii.kitchen
+- Les **prix du menu** sont des estimations réalistes à confirmer sur Dood. ⚠️
 
 ## Conventions de code
 - Indentation : 2 espaces

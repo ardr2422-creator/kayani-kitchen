@@ -1,9 +1,9 @@
 /* =========================================================================
    KAYANI KITCHEN — Données du menu
-   Source : Uber Eats (récupéré le 21/06/2026).
+   Source : carte en ligne du restaurant (récupéré le 21/06/2026).
    - `img`  : nom de fichier exact dans /images (encodé à l'affichage).
    - `tags` : star = best-seller · heat = épicé · veg = végétarien · new = nouveau
-   - `prix` : prix Uber Eats (livraison). À confirmer pour la commande directe.
+   - `prix` : prix indicatifs (livraison). À confirmer sur Dood.
    ========================================================================= */
 window.KAYANI_MENU = [
   /* -----------------------------------------------------------------------
