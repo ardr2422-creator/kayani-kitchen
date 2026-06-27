@@ -68,7 +68,7 @@ doivent être validées par le restaurant :
 - **Email** : gestion@kayani.kitchen.
 - **Horaires** : Lun/Jeu/Ven/Sam/Dim 11h30–14h15 & 18h00–23h00 ; Mar/Mer soir uniquement.
 - **Coordonnées GPS** du JSON-LD (`index.html`) : approximatives (centre de Sannois).
-- **Prix du menu** : estimations réalistes — à aligner sur Uber Eats / dood.
+- **Prix du menu** : estimations réalistes — à aligner sur la carte Dood.
 - **Avis clients** : 2 sont repris de TripAdvisor ; remplacer les autres par de
   vrais avis Google/TripAdvisor (verbatim). Ne jamais afficher le nombre total d'avis.
 - **Liens légaux** (mentions légales, confidentialité) : pages à créer.

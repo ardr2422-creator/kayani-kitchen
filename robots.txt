@@ -1,0 +1,21 @@
+# Kayani Kitchen — robots.txt
+# Restaurant indien & pakistanais à Sannois (95) — livraison & à emporter
+
+User-agent: *
+Allow: /
+
+# Moteurs IA (réponses génératives) — explicitement autorisés
+User-agent: GPTBot
+Allow: /
+User-agent: OAI-SearchBot
+Allow: /
+User-agent: ChatGPT-User
+Allow: /
+User-agent: PerplexityBot
+Allow: /
+User-agent: Google-Extended
+Allow: /
+User-agent: ClaudeBot
+Allow: /
+
+Sitemap: https://kayani-kitchen.com/sitemap.xml
